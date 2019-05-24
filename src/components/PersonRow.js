@@ -8,25 +8,25 @@ import {
   Image
 } from "react-native";
 
-export default class PersonRow extends Component {
-  state = {
-    showInfo: false
-  };
+import Icon from "react-native-vector-icons/FontAwesome";
 
+export default class PersonRow extends Component {
   infoPressed = () => {
-    this.setState({ showInfo: !this.state.showInfo });
+    this.props.navigation.navigate("Info", {
+      person: this.props.person
+    });
   };
 
   render() {
     const { person, index } = this.props;
     return (
       <View
-        key={person.name.first}
+        key={person.email}
         style={{ backgroundColor: index % 2 === 0 ? "white" : "#F3F3F7" }}
       >
         <View style={styles.row}>
           <View style={styles.edges}>
-            <Text>{index + 1}</Text>
+            <Icon name="star" color="#FFD64C" />
           </View>
 
           <View style={styles.nameAddress}>
@@ -45,7 +45,7 @@ export default class PersonRow extends Component {
           </View>
         </View>
 
-        {this.state.showInfo && (
+        {/* {this.state.showInfo && (
           <View style={styles.info}>
             <Text>Person Info</Text>
             <Image
@@ -54,7 +54,7 @@ export default class PersonRow extends Component {
               resizeMode="contain"
             />
           </View>
-        )}
+        )} */}
       </View>
     );
   }

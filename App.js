@@ -1,63 +1,64 @@
 import React, { Component } from "react";
-import { View, StyleSheet, TextInput, FlatList } from "react-native";
-import Header from "components/Header";
-import PersonRow from "components/PersonRow";
-import axios from "axios";
+import {
+  createStackNavigator,
+  createAppContainer,
+  createBottomTabNavigator
+} from "react-navigation";
+import PeopleList from "components/PeopleList";
+import PeopleInfo from "components/PeopleInfo";
+import Icons from "react-native-vector-icons/FontAwesome";
+import About from "components/About";
 
-export default class App extends Component {
-  state = {
-    search: null,
-    people: []
-  };
-
-  componentDidMount() {
-    axios
-      .get("https://randomuser.me/api/?results=25")
-      .then(({ data }) => this.setState({ people: data.results }));
+const List = createStackNavigator(
+  {
+    Home: { screen: PeopleList },
+    Info: { screen: PeopleInfo }
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: "#0066CC",
+        color: "#FFF"
+      },
+      headerTintColor: "#FFF",
+      headerTitleStyle: {
+        color: "#FFF"
+      }
+    }
   }
+);
 
-  render() {
-    console.log(this.state.people);
-    return (
-      <View style={{ flex: 1 }}>
-        <Header />
-        <TextInput
-          style={styles.input}
-          placeholder="Live search"
-          onChangeText={text => {
-            this.setState({ search: text });
-          }}
-          value={this.state.search}
-        />
-
-        <FlatList
-          data={this.state.people.filter(person => {
-            return (
-              !this.state.search ||
-              person.name.first
-                .toLowerCase()
-                .indexOf(this.state.search.toLowerCase()) > -1
-            );
-          })}
-          renderItem={({ item, index }) => (
-            <PersonRow person={item} index={index} />
-          )}
-          keyExtractor={item => item.name.first}
-          initialNumToRender={16}
-        />
-      </View>
-    );
+const Tabs = createBottomTabNavigator(
+  {
+    List: { screen: List },
+    About: { screen: About }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        const name = {
+          List: "list",
+          About: "info-circle"
+        };
+        name[routeName];
+        return <Icons name={name[routeName]} size={22} color={tintColor} />;
+      }
+    }),
+    tabBarOptions: {
+      activeBackgroundColor: "#E6F0FA"
+    }
   }
-}
+);
 
-const styles = StyleSheet.create({
-  input: {
-    padding: 10,
-    paddingHorizontal: 20,
-    fontSize: 16,
-    color: "#444",
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#F5F5F5"
+const AppNavigator = createStackNavigator(
+  {
+    Tabs: { screen: Tabs }
+  },
+  {
+    mode: "modal",
+    headerMode: "none"
   }
-});
+);
+
+export default createAppContainer(AppNavigator);
