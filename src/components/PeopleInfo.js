@@ -14,6 +14,10 @@ export default class PeopleInfo extends Component {
     title: "Restaurant Info"
   };
 
+  addInfo = () => {
+    this.props.navigation.navigate("AddInfo");
+  };
+
   render() {
     const person =
       // getParam is like state.params but we don't need to check for null using it
@@ -37,7 +41,7 @@ export default class PeopleInfo extends Component {
               person.location.city
             }`}</Text>
             <Text style={styles.address}>{`Age: ${person.dob.age}`}</Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={this.addInfo}>
               <Text style={styles.buttonText}>Add info</Text>
             </TouchableOpacity>
           </View>

@@ -8,6 +8,7 @@ import PeopleList from "components/PeopleList";
 import PeopleInfo from "components/PeopleInfo";
 import Icons from "react-native-vector-icons/FontAwesome";
 import About from "components/About";
+import AddInfo from "components/AddInfo";
 
 const List = createStackNavigator(
   {
@@ -53,11 +54,15 @@ const Tabs = createBottomTabNavigator(
 
 const AppNavigator = createStackNavigator(
   {
-    Tabs: { screen: Tabs }
+    Tabs: { screen: Tabs },
+    AddInfo: { screen: AddInfo }
   },
   {
     mode: "modal",
-    headerMode: "none"
+    headerMode: "none",
+    navigationOptions: {
+      gesturesEnabled: false
+    }
   }
 );
 
